@@ -25,7 +25,7 @@ public class CourseErpBackendApplication implements CommandLineRunner {
 //                status(UserStatus.ACTIVE).
 //                roleId(1L).
 //                email("email@email.com").
-//                phoneNumber("555555555").
+//                phoneNumber("5555555555").
 //                password("123456").build();
 //        userRepository.insert(user);
 

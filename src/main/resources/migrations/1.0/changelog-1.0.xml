@@ -4,4 +4,5 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <include file="migrations/1.0/1.0.0-user-table.xml"/>
+    <include file="migrations/1.0/1.0.1-role-tables.xml"/>
 </databaseChangeLog>
