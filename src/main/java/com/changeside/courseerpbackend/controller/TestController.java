@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     @GetMapping("/test")
     public BaseResponse<String> test(){
-        return BaseResponse.success("Course ERP");
+        return BaseResponse.success("Course ");
     }
 }
