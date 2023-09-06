@@ -32,9 +32,11 @@ public class CourseErpBackendApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        User user= User.builder().email("aytacmammadli@gmai.com").build();
-        user.setId(1L);
-        System.out.println(accessTokenManager.generate(user));
+//        User user= User.builder().email("aytacmammadli@gmai.com").build();
+//        user.setId(1L);
+//        final String token=accessTokenManager.generate(user);
+//        System.out.println(token);
+//        System.out.println(accessTokenManager.read(token).get("email",String.class));
 //        System.out.println(securityProperties);
 //        KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance("RSA");
 //        keyGenerator.initialize(2048);
