@@ -5,12 +5,14 @@ import com.changeside.courseerpbackend.models.mybatis.user.User;
 import com.changeside.courseerpbackend.models.proporties.security.SecurityProperties;
 import com.changeside.courseerpbackend.repository.UserRepository;
 import com.changeside.courseerpbackend.services.security.AccessTokenManager;
+import com.changeside.courseerpbackend.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -27,11 +29,27 @@ public class CourseErpBackendApplication implements CommandLineRunner {
     }
 
 
-//    private final SecurityProperties securityProperties;
+    //    private final SecurityProperties securityProperties;
     private final AccessTokenManager accessTokenManager;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
+//        User user = User.builder().
+//                name("Sema").
+//                surname("Quliyeva").
+//                password(passwordEncoder.encode("123456")).
+//                email("semaquliyeva@gmail.com").
+//                roleId(1L).
+//                phoneNumber("123456").
+//                status(UserStatus.ACTIVE).
+//                build();
+//        userService.insert(user);
+
+
+        System.out.println(userService.getByEmail("semaquliyeva@gmail.com"));
+
 //        User user= User.builder().email("aytacmammadli@gmai.com").build();
 //        user.setId(1L);
 //        final String token=accessTokenManager.generate(user);
