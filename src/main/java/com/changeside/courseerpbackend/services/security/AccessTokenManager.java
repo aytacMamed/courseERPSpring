@@ -1,9 +1,11 @@
 package com.changeside.courseerpbackend.services.security;
 
+import com.changeside.courseerpbackend.constants.TokenConstants;
 import com.changeside.courseerpbackend.models.mybatis.user.User;
 import com.changeside.courseerpbackend.models.proporties.security.SecurityProperties;
 import com.changeside.courseerpbackend.services.base.TokenGenerator;
 import com.changeside.courseerpbackend.services.base.TokenReader;
+import com.changeside.courseerpbackend.services.getters.EmailGetter;
 import com.changeside.courseerpbackend.utils.PublicPrivateKeyUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,13 +20,13 @@ import java.util.Date;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class AccessTokenManager implements TokenGenerator<User>, TokenReader<Claims> {
+public class AccessTokenManager implements TokenGenerator<User>, TokenReader<Claims>, EmailGetter {
 private final SecurityProperties securityProperties;
 
     @Override
     public String generate(User obj) {
         Claims claims= Jwts.claims();
-        claims.put("email",obj.getEmail());
+        claims.put(TokenConstants.EMAIL_KEY,obj.getEmail());
         Date now=new Date();
         Date exp=new Date(now.getTime()+securityProperties.getJwt().getAccessTokenValidityTime());
 
@@ -44,5 +46,10 @@ private final SecurityProperties securityProperties;
                 build().
                 parseClaimsJws(token).
                 getBody();
+    }
+
+    @Override
+    public String getEmail(String token) {
+        return read(token).get(TokenConstants.EMAIL_KEY,String.class);
     }
 }

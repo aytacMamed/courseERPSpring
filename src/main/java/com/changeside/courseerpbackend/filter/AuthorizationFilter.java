@@ -1,8 +1,10 @@
 package com.changeside.courseerpbackend.filter;
 
+import com.changeside.courseerpbackend.constants.TokenConstants;
 import com.changeside.courseerpbackend.models.mybatis.user.User;
 import com.changeside.courseerpbackend.models.security.LoggedInUserDetails;
 import com.changeside.courseerpbackend.services.security.AccessTokenManager;
+import com.changeside.courseerpbackend.services.security.AuthBusinessService;
 import com.changeside.courseerpbackend.services.user.UserService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -10,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,22 +28,20 @@ import java.util.Objects;
 public class AuthorizationFilter extends OncePerRequestFilter {
     private final AccessTokenManager accessTokenManager;
     private final UserDetailsService userDetailsService;
+    private final AuthBusinessService authBusinessService;
+
+
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-       String token= request.getHeader("Authorization");
-       if (Objects.nonNull(token) && token.startsWith("Bearer")){
-           final String accessToken=token.substring(7);
-        Claims claims= accessTokenManager.read(accessToken);
-      String email= claims.get("email",String.class);
-   UserDetails userDetails= userDetailsService.loadUserByUsername(email);
-
-           SecurityContextHolder.getContext().setAuthentication(
-                   new UsernamePasswordAuthenticationToken(userDetails," ",userDetails.getAuthorities())
-           );
-       }
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (Objects.nonNull(token) && token.startsWith(TokenConstants.PREFIX)) {
+            final String accessToken = token.substring(7);
+           authBusinessService.setAuthentication(accessTokenManager.getEmail(accessToken));
+        }
         System.out.println(token);
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
 
     }
 }

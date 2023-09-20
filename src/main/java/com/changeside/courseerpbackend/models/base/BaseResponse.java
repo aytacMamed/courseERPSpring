@@ -18,4 +18,7 @@ public class BaseResponse <T> {
     public static <T> BaseResponse<T> success(T data){
         return BaseResponse.<T>builder().status(HttpStatus.OK).msg("SUCCESS").data(data).build();
     }
+    public static <T> BaseResponse<T> success(){
+        return BaseResponse.success(null);
+    }
 }

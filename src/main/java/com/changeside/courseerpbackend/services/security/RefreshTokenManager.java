@@ -1,10 +1,12 @@
 package com.changeside.courseerpbackend.services.security;
 
+import com.changeside.courseerpbackend.constants.TokenConstants;
 import com.changeside.courseerpbackend.models.dto.RefreshTokenDto;
 import com.changeside.courseerpbackend.models.mybatis.user.User;
 import com.changeside.courseerpbackend.models.proporties.security.SecurityProperties;
 import com.changeside.courseerpbackend.services.base.TokenGenerator;
 import com.changeside.courseerpbackend.services.base.TokenReader;
+import com.changeside.courseerpbackend.services.getters.EmailGetter;
 import com.changeside.courseerpbackend.utils.PublicPrivateKeyUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -18,7 +20,7 @@ import java.util.Date;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class RefreshTokenManager  implements TokenGenerator<RefreshTokenDto>, TokenReader<Claims> {
+public class RefreshTokenManager  implements TokenGenerator<RefreshTokenDto>, TokenReader<Claims>, EmailGetter {
     private final SecurityProperties securityProperties;
     @Override
     public String generate(RefreshTokenDto obj) {
@@ -40,10 +42,21 @@ public class RefreshTokenManager  implements TokenGenerator<RefreshTokenDto>, To
 
     @Override
     public Claims read(String token) {
-        return Jwts.parserBuilder().
+       Claims tokenData= Jwts.parserBuilder().
                 setSigningKey(PublicPrivateKeyUtils.getPublicKey()).
                 build().
                 parseClaimsJws(token).
                 getBody();
+
+       String typeOfToken=tokenData.get("type",String.class);
+       if (!typeOfToken.equals("REFRESH_TOKEN")){
+           throw new RuntimeException("invalid exception type");
+       }
+        return tokenData;
+    }
+
+    @Override
+    public String getEmail(String token) {
+        return read(token).get(TokenConstants.EMAIL_KEY,String.class);
     }
 }
