@@ -1,5 +1,6 @@
 package com.changeside.courseerpbackend.services.user;
 
+import com.changeside.courseerpbackend.exception.BaseException;
 import com.changeside.courseerpbackend.models.mybatis.user.User;
 import com.changeside.courseerpbackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(
-                //todo:insert real exception model
-                () -> new RuntimeException("User not found")
+                () -> BaseException.notFound(User.class.getSimpleName(),"email",email)
         );
     }
 
