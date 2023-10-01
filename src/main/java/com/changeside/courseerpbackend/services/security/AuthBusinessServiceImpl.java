@@ -1,11 +1,17 @@
 package com.changeside.courseerpbackend.services.security;
 
+import com.changeside.courseerpbackend.exception.BaseException;
 import com.changeside.courseerpbackend.models.base.BaseResponse;
 import com.changeside.courseerpbackend.models.dto.RefreshTokenDto;
+import com.changeside.courseerpbackend.models.enums.response.ErrorResponseMessages;
+import com.changeside.courseerpbackend.models.mappers.UserEntityMapper;
+import com.changeside.courseerpbackend.models.mybatis.role.Role;
 import com.changeside.courseerpbackend.models.mybatis.user.User;
 import com.changeside.courseerpbackend.models.payload.auth.LoginPayload;
 import com.changeside.courseerpbackend.models.payload.auth.RefreshTokenPayload;
+import com.changeside.courseerpbackend.models.payload.auth.SignUpPayload;
 import com.changeside.courseerpbackend.models.response.auth.LoginResponse;
+import com.changeside.courseerpbackend.services.role.RoleService;
 import com.changeside.courseerpbackend.services.user.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +22,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static com.changeside.courseerpbackend.models.enums.response.ErrorResponseMessages.*;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +36,8 @@ public class AuthBusinessServiceImpl implements AuthBusinessService{
     private final RefreshTokenManager refreshTokenManager;
     private final UserService userService;
     private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
     @Override
     public LoginResponse login(LoginPayload loginPayload) {
         authenticate(loginPayload);
@@ -45,6 +56,18 @@ public class AuthBusinessServiceImpl implements AuthBusinessService{
     public void logout() {
         UserDetails userDetails=(UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info(" {} user logout succeed ", userDetails.getUsername());
+    }
+
+    @Override
+    public void singUp(SignUpPayload payload) {
+        if (userService.checkByEmail(payload.getEmail())){
+            throw  BaseException.of(EMAIL_ALREADY_REGISTERED);
+        }
+        Role defaultRole=roleService.getDefaultRole();
+        User user=
+                UserEntityMapper.INSTANCE.fromSignUpPayloadToUser
+                        (payload,passwordEncoder.encode(payload.getPassword()),defaultRole.getId());
+        userService.insert(user);
     }
 
     @Override

@@ -2,9 +2,11 @@ package com.changeside.courseerpbackend.controller;
 
 import com.changeside.courseerpbackend.models.base.BaseResponse;
 import com.changeside.courseerpbackend.models.dto.RefreshTokenDto;
+import com.changeside.courseerpbackend.models.mappers.UserEntityMapper;
 import com.changeside.courseerpbackend.models.mybatis.user.User;
 import com.changeside.courseerpbackend.models.payload.auth.LoginPayload;
 import com.changeside.courseerpbackend.models.payload.auth.RefreshTokenPayload;
+import com.changeside.courseerpbackend.models.payload.auth.SignUpPayload;
 import com.changeside.courseerpbackend.models.response.auth.LoginResponse;
 import com.changeside.courseerpbackend.services.security.AccessTokenManager;
 import com.changeside.courseerpbackend.services.security.AuthBusinessService;
@@ -23,21 +25,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
-private final AuthBusinessService authBusinessService;
+    private final AuthBusinessService authBusinessService;
 
     @PostMapping("/login")
-    public BaseResponse<LoginResponse> login(@RequestBody LoginPayload loginPayload){
-       return BaseResponse.success(authBusinessService.login(loginPayload));
-    };
+    public BaseResponse<LoginResponse> login(@RequestBody LoginPayload loginPayload) {
+        return BaseResponse.success(authBusinessService.login(loginPayload));
+    }
+
+    ;
 
     @PostMapping("/token/refresh")
-    public BaseResponse<LoginResponse> refresh(@RequestBody RefreshTokenPayload refreshTokenPayload){
-        return BaseResponse.success(authBusinessService.refresh(refreshTokenPayload)) ;
+    public BaseResponse<LoginResponse> refresh(@RequestBody RefreshTokenPayload refreshTokenPayload) {
+        return BaseResponse.success(authBusinessService.refresh(refreshTokenPayload));
     }
 
     @PostMapping("/logout")
-    public BaseResponse<Void> logout(){
+    public BaseResponse<Void> logout() {
         authBusinessService.logout();
         return BaseResponse.success();
     }
+
+    @PostMapping("/sing-up")
+    public BaseResponse<Void> singUp(@RequestBody SignUpPayload payload) {
+//        System.out.println(UserEntityMapper.INSTANCE.fromSignUpPayloadToUser(payload, "123123", 1L));
+
+        authBusinessService.singUp(payload);
+        return BaseResponse.success();
+    }
+
 }
