@@ -5,8 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="alter-role-table" author="aytacmammadli">
-        <dropNotNullConstraint columnName="owner_id"
-                               tableName="roles"/>
+    <changeSet id="alter-employee-table" author="aytacmammadli">
+        <dropColumn tableName="employees" columnName="branch_id"/>
+        <dropColumn tableName="employees" columnName="type"/>
+        <dropColumn tableName="employees" columnName="address"/>
     </changeSet>
 </databaseChangeLog>

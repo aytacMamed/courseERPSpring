@@ -20,4 +20,8 @@ public class User extends BaseEntity {
     String phoneNumber;
     String password;
 
+    public boolean isActive(){
+        return UserStatus.ACTIVE.equals(status);
+    }
+
 }

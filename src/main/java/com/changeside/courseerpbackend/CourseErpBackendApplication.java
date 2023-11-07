@@ -1,7 +1,9 @@
 package com.changeside.courseerpbackend;
 
 import com.changeside.courseerpbackend.models.enums.user.UserStatus;
+import com.changeside.courseerpbackend.models.mappers.CourseEntityMapper;
 import com.changeside.courseerpbackend.models.mybatis.user.User;
+import com.changeside.courseerpbackend.models.payload.auth.SignUpPayload;
 import com.changeside.courseerpbackend.models.proporties.security.SecurityProperties;
 import com.changeside.courseerpbackend.repository.UserRepository;
 import com.changeside.courseerpbackend.services.security.AccessTokenManager;
@@ -48,7 +50,7 @@ public class CourseErpBackendApplication implements CommandLineRunner {
 //        userService.insert(user);
 
 
-        System.out.println(userService.getByEmail("semaquliyeva@gmail.com"));
+//        System.out.println(userService.getByEmail("semaquliyeva@gmail.com")); //TAK-TAK
 
 //        User user= User.builder().email("aytacmammadli@gmai.com").build();
 //        user.setId(1L);

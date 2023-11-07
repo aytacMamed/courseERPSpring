@@ -1,21 +1,14 @@
 package com.changeside.courseerpbackend.controller;
 
 import com.changeside.courseerpbackend.models.base.BaseResponse;
-import com.changeside.courseerpbackend.models.dto.RefreshTokenDto;
-import com.changeside.courseerpbackend.models.mappers.UserEntityMapper;
-import com.changeside.courseerpbackend.models.mybatis.user.User;
 import com.changeside.courseerpbackend.models.payload.auth.LoginPayload;
 import com.changeside.courseerpbackend.models.payload.auth.RefreshTokenPayload;
 import com.changeside.courseerpbackend.models.payload.auth.SignUpPayload;
+import com.changeside.courseerpbackend.models.payload.otp.BaseOTPChannelRequest;
+import com.changeside.courseerpbackend.models.payload.otp.BaseOTPRequest;
 import com.changeside.courseerpbackend.models.response.auth.LoginResponse;
-import com.changeside.courseerpbackend.services.security.AccessTokenManager;
 import com.changeside.courseerpbackend.services.security.AuthBusinessService;
-import com.changeside.courseerpbackend.services.security.RefreshTokenManager;
-import com.changeside.courseerpbackend.services.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +44,20 @@ public class AuthController {
 
         authBusinessService.singUp(payload);
         return BaseResponse.success();
+    }
+
+    @PostMapping("/sign-up/otp/request")
+    public BaseResponse<Void> otpRequest(@RequestBody BaseOTPChannelRequest payload){
+        authBusinessService.singUpOTP(payload);
+        return BaseResponse.success();
+
+    }
+
+    @PostMapping("/sign-up/otp/confirmation")
+    public BaseResponse<Void> otpConfirmation(@RequestBody BaseOTPRequest payload){
+        authBusinessService.singUpOTPConfirmation(payload);
+        return BaseResponse.success();
+
     }
 
 }

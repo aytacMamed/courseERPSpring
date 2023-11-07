@@ -8,4 +8,7 @@
     <include file="migrations/1.0/1.0.2-alter-role-table.xml"/>
     <include file="migrations/1.0/1.0.3-course-table.xml"/>
     <include file="migrations/1.0/1.0.4-insert-default-role.xml"/>
+    <include file="migrations/1.0/1.0.7-alter-employee-table.xml"/>
+    <include file="migrations/1.0/1.0.8-employee-branches-table.xml"/>
+
 </databaseChangeLog>
